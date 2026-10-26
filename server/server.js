@@ -27,6 +27,17 @@ app.use("/api/gd-sessions", gdMessageRoutes);
 // Public Speaking routes
 app.use("/api/speaking", speakingRoutes);
 
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+//Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/gd-sessions", gdSessionRoutes);
+app.use("/api/gd-sessions", gdMessageRoutes);
+
 // Test route
 app.get("/", (req, res) => {
   res.json({
@@ -49,3 +60,7 @@ const startServer = async () => {
 };
 
 startServer();
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

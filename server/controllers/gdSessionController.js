@@ -1,74 +1,4 @@
 
-const GDSession = require("../models/GDSession");
-
-// CREATE GD SESSION
-const createGDSession = async (req, res) => {
-  try {
-    const { topic, difficulty, duration } = req.body;
-
-    if (!topic || !difficulty || !duration) {
-      return res.status(400).json({
-        message: "Please provide topic, difficulty and duration.",
-      });
-    }
-
-    const session = await GDSession.create({
-      userId: req.userId,
-      topic,
-      difficulty,
-      duration,
-    });
-
-    res.status(201).json({
-      message: "GD session created successfully.",
-      session,
-    });
-  } catch (error) {
-    console.error("Create GD session error:", error);
-
-    res.status(500).json({
-      message: "Server error while creating GD session.",
-    });
-  }
-};
-
-const completeGDSession = async (req, res) => {
-  try {
-    const { sessionId } = req.params;
-
-    const session = await GDSession.findById(sessionId);
-
-    if (!session) {
-      return res.status(404).json({
-        message: "GD session not found.",
-      });
-    }
-
-    if (session.userId.toString() !== req.userId.toString()) {
-      return res.status(403).json({
-        message: "You are not authorized to access this session.",
-      });
-    }
-
-    session.status = "completed";
-    session.endedAt = new Date();
-
-    await session.save();
-
-    res.status(200).json({
-      message: "GD session completed successfully.",
-      session,
-    });
-  } catch (error) {
-    console.error("Complete GD session error:", error);
-
-    res.status(500).json({
-      message: "Server error while completing GD session.",
-    });
-  }
-};
-
-// GET DASHBOARD STATISTICS
 const getDashboardStats = async (req, res) => {
   try {
     const sessions = await GDSession.find({
@@ -82,9 +12,11 @@ const getDashboardStats = async (req, res) => {
     // Calculate consecutive practice days
     const practiceDates = [
       ...new Set(
-        completedSessions.map((session) =>
-          new Date(session.createdAt).toISOString().slice(0, 10)
-        )
+        completedSessions.map((session) => {
+          const date = new Date(session.createdAt);
+          date.setHours(0, 0, 0, 0);
+          return date.toISOString().slice(0, 10);
+        })
       ),
     ].sort((a, b) => b.localeCompare(a));
 
@@ -103,7 +35,7 @@ const getDashboardStats = async (req, res) => {
         latestDate.getTime() === today.getTime() ||
         latestDate.getTime() === yesterday.getTime()
       ) {
-        let expectedDate = new Date(latestDate);
+        const expectedDate = new Date(latestDate);
 
         for (const date of practiceDates) {
           const currentDate = new Date(`${date}T00:00:00`);
@@ -130,10 +62,4 @@ const getDashboardStats = async (req, res) => {
       message: "Server error while fetching dashboard statistics.",
     });
   }
-};
-
-module.exports = {
-  createGDSession,
-  getDashboardStats,
-  completeGDSession,
 };

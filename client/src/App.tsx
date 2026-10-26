@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -16,7 +17,6 @@ import SpeechReport from "./pages/SpeechReport.jsx";
 import SpeechHistory from "./pages/SpeechHistory.jsx";
 import VirtualAudience from "./pages/VirtualAudience.jsx";
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -24,30 +24,49 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
-        <Route path="/gd-setup"element={<ProtectedRoute><GDSetup/></ProtectedRoute>}/>
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/gd-setup"
+          element={
+            <ProtectedRoute>
+              <GDSetup />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/speaking" element={<SpeakingHome />} />
-<Route path="/speaking/topics" element={<TopicSelection />} />
-<Route path="/speaking/practice" element={<SpeechPractice />} />
-<Route path="/speaking/report" element={<SpeechReport />} />
-<Route path="/speaking/history" element={<SpeechHistory />} />
-<Route path="/speaking/audience" element={<VirtualAudience />} />
+        <Route path="/speaking/topics" element={<TopicSelection />} />
+        <Route path="/speaking/practice" element={<SpeechPractice />} />
+        <Route path="/speaking/report" element={<SpeechReport />} />
+        <Route path="/speaking/history" element={<SpeechHistory />} />
+        <Route path="/speaking/audience" element={<VirtualAudience />} />
+
         <Route
-  path="/gd-room"
-  element={
-    <ProtectedRoute>
-      <GDRoom />
-    </ProtectedRoute>
-  }
-/>
+          path="/gd-room"
+          element={
+            <ProtectedRoute>
+              <GDRoom />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
-  path="/gd-report"
-  element={
-    <ProtectedRoute>
-      <GDReport />
-    </ProtectedRoute>
-  }
-/>
+          path="/gd-report"
+          element={
+            <ProtectedRoute>
+              <GDReport />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

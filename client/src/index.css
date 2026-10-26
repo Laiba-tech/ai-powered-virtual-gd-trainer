@@ -5,6 +5,8 @@
    Global Styles
 ========================= */
 
+@import "tailwindcss";
+
 * {
   box-sizing: border-box;
 }
@@ -478,4 +480,5 @@ button:disabled {
   .speech-timer {
     width: 100%;
   }
+}
 }

@@ -1,16 +1,77 @@
 
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+interface DashboardStats {
+  sessionsCompleted: number;
+  averageScore: number | null;
+  practiceStreak: number;
+}
 
 function Dashboard() {
   const navigate = useNavigate();
 
+  const [stats, setStats] = useState<DashboardStats>({
+    sessionsCompleted: 0,
+    averageScore: null,
+    practiceStreak: 0,
+  });
+
+  const [statsLoading, setStatsLoading] = useState(true);
+
   const userData = localStorage.getItem("user");
-  const user = userData ? JSON.parse(userData) : null;
+  let user = null;
+
+  try {
+    user = userData ? JSON.parse(userData) : null;
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+  }
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setStatsLoading(false);
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/gd-sessions/dashboard-stats",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 401 || response.status === 403) {
+          navigate("/login");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard statistics.");
+        }
+
+        const data: DashboardStats = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error("Dashboard stats error:", error);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchDashboardStats();
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     navigate("/login");
   };
 
@@ -48,51 +109,49 @@ function Dashboard() {
         </p>
 
         <h1 className="mt-3 text-4xl font-bold">
-          Ready for your next practice session?
+          Ready for your next GD?
         </h1>
 
         <p className="mt-4 max-w-2xl text-slate-400">
-          Improve your communication, practice group discussions,
-          develop public speaking skills, and track your performance
-          over time.
+          Start a practice session, improve your communication, and track your
+          performance over time.
         </p>
 
-        {/* Existing dashboard statistics */}
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <p className="text-sm text-slate-500">
-              Sessions Completed
+            <p className="text-sm text-slate-500">Sessions Completed</p>
+            <p className="mt-3 text-4xl font-bold">
+              {statsLoading ? "..." : stats.sessionsCompleted}
             </p>
-            <p className="mt-3 text-4xl font-bold">0</p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <p className="text-sm text-slate-500">
-              Average Score
+            <p className="text-sm text-slate-500">Average Score</p>
+            <p className="mt-3 text-4xl font-bold">
+              {statsLoading
+                ? "..."
+                : stats.averageScore !== null
+                  ? stats.averageScore
+                  : "—"}
             </p>
-            <p className="mt-3 text-4xl font-bold">—</p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <p className="text-sm text-slate-500">
-              Practice Streak
+            <p className="text-sm text-slate-500">Practice Streak</p>
+            <p className="mt-3 text-4xl font-bold">
+              {statsLoading ? "..." : `${stats.practiceStreak} days`}
             </p>
-            <p className="mt-3 text-4xl font-bold">0 days</p>
           </div>
         </div>
 
-        {/* Existing GD section - preserved */}
         <div className="mt-10 rounded-2xl border border-white/10 bg-slate-900 p-8">
-          <div className="mb-4 text-3xl">👥</div>
-
           <h2 className="text-2xl font-semibold">
-            Group Discussion Practice
+            Start your next practice session
           </h2>
 
           <p className="mt-3 text-slate-400">
-            Choose a topic and enter a virtual Group Discussion
-            with AI participants. Practice teamwork, critical
-            thinking, and expressing your opinions.
+            Choose a topic and enter a virtual Group Discussion with AI
+            participants.
           </p>
 
           <button
@@ -101,38 +160,6 @@ function Dashboard() {
           >
             Start GD →
           </button>
-        </div>
-
-        {/* New Public Speaking section */}
-        <div className="mt-6 rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-950/50 to-slate-900 p-8">
-          <div className="mb-4 text-3xl">🎤</div>
-
-          <h2 className="text-2xl font-semibold">
-            Public Speaking Practice
-          </h2>
-
-          <p className="mt-3 max-w-2xl text-slate-400">
-            Practice individual speeches on different topics,
-            record your speech, review your transcript, and
-            receive AI-powered feedback to improve your clarity,
-            fluency, vocabulary, and speaking confidence.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-4">
-            <button
-              onClick={() => navigate("/speaking/topics")}
-              className="rounded-xl bg-violet-500 px-6 py-3 font-semibold text-white transition hover:bg-violet-400"
-            >
-              Start Speaking Practice →
-            </button>
-
-            <button
-              onClick={() => navigate("/speaking/history")}
-              className="rounded-xl border border-white/15 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
-            >
-              View Speech History
-            </button>
-          </div>
         </div>
       </main>
     </div>
