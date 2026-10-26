@@ -1,0 +1,481 @@
+
+@import "tailwindcss";
+
+/* =========================
+   Global Styles
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #020617;
+  color: #f8fafc;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Public Speaking Pages
+========================= */
+
+.speaking-page {
+  width: min(100% - 32px, 1000px);
+  margin: 32px auto;
+  color: #f8fafc;
+}
+
+.speaking-page h1 {
+  margin-bottom: 12px;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+}
+
+.speaking-page h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.speaking-page p {
+  line-height: 1.7;
+  color: #94a3b8;
+}
+
+.speaking-page label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.speaking-page input,
+.speaking-page select,
+.speaking-page textarea {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #f8fafc;
+  font: inherit;
+  outline: none;
+}
+
+.speaking-page input:focus,
+.speaking-page select:focus,
+.speaking-page textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 15%);
+}
+
+.speaking-page textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.speaking-page button {
+  padding: 11px 18px;
+  margin: 8px 8px 8px 0;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.speaking-page button:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   Speaking Cards
+========================= */
+
+.speaking-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.speaking-card {
+  padding: 20px;
+  margin: 16px 0;
+  border: 1px solid rgb(148 163 184 / 18%);
+  border-radius: 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.speaking-card:hover {
+  border-color: rgb(59 130 246 / 60%);
+  transform: translateY(-2px);
+}
+
+.speaking-cards a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.speaking-card h2,
+.speaking-card h3 {
+  margin-top: 0;
+  color: #f8fafc;
+}
+
+/* =========================
+   Speech Recorder
+========================= */
+
+.speech-recorder,
+.transcript-panel,
+.speech-score-card,
+.audience-panel {
+  padding: 24px;
+  margin: 20px 0;
+  border: 1px solid rgb(148 163 184 / 18%);
+  border-radius: 16px;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.speech-recorder h2,
+.transcript-panel h2,
+.speech-score-card h2,
+.audience-panel h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.speech-recorder button {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+}
+
+.speech-recorder button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.speech-recorder [role="alert"] {
+  color: #fca5a5;
+}
+
+/* =========================
+   Speaking Timer
+========================= */
+
+.speech-timer {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 170px;
+  padding: 18px 22px;
+  margin: 16px 0;
+  border: 1px solid rgb(59 130 246 / 30%);
+  border-radius: 14px;
+  background: #0f172a;
+}
+
+.speech-timer span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.speech-timer h2 {
+  margin: 0;
+  color: #60a5fa;
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================
+   Transcript Panel
+========================= */
+
+.transcript-panel textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 16px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #020617;
+  color: #e2e8f0;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.transcript-panel textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.transcript-panel p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+/* =========================
+   Speech Evaluation Scores
+========================= */
+
+.overall-score {
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgb(59 130 246 / 25%);
+  border-radius: 12px;
+  background: rgb(30 58 138 / 20%);
+}
+
+.overall-score span {
+  color: #cbd5e1;
+}
+
+.overall-score h1 {
+  margin: 8px 0 0;
+  color: #60a5fa;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.score-item {
+  margin: 18px 0;
+}
+
+.score-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+}
+
+.score-label strong {
+  color: #93c5fd;
+}
+
+.score-item progress {
+  display: block;
+  width: 100%;
+  height: 9px;
+  overflow: hidden;
+  border: none;
+  border-radius: 10px;
+  background: #334155;
+  accent-color: #3b82f6;
+}
+
+.score-item progress::-webkit-progress-bar {
+  border-radius: 10px;
+  background: #334155;
+}
+
+.score-item progress::-webkit-progress-value {
+  border-radius: 10px;
+  background: #3b82f6;
+}
+
+.score-item progress::-moz-progress-bar {
+  border-radius: 10px;
+  background: #3b82f6;
+}
+
+/* =========================
+   Virtual Audience
+========================= */
+
+.audience-panel {
+  border-color: rgb(139 92 246 / 30%);
+}
+
+.audience-panel h2 {
+  color: #c4b5fd;
+}
+
+.audience-panel p {
+  line-height: 1.8;
+}
+
+.audience-panel button {
+  background: #7c3aed;
+}
+
+.audience-panel button:hover:not(:disabled) {
+  background: #6d28d9;
+}
+
+/* =========================
+   Public Speaking Dashboard
+========================= */
+
+.speaking-dashboard {
+  width: min(100% - 32px, 1200px);
+  margin: 32px auto;
+}
+
+.speaking-dashboard-header {
+  margin-bottom: 32px;
+}
+
+.speaking-dashboard-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+}
+
+.speaking-dashboard-header p {
+  max-width: 700px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+
+.speaking-action-card {
+  padding: 28px;
+  border: 1px solid rgb(148 163 184 / 18%);
+  border-radius: 18px;
+  background: #0f172a;
+}
+
+.speaking-action-card h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.speaking-action-card p {
+  color: #94a3b8;
+  line-height: 1.7;
+}
+
+.speaking-action-card button {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #7c3aed;
+  color: #fff;
+}
+
+.speaking-action-card button:hover:not(:disabled) {
+  background: #6d28d9;
+}
+
+/* =========================
+   Speech History
+========================= */
+
+.speech-history-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.speech-history-item {
+  padding: 20px;
+  border: 1px solid rgb(148 163 184 / 18%);
+  border-radius: 12px;
+  background: #0f172a;
+}
+
+.speech-history-item h3 {
+  margin-top: 0;
+  color: #f8fafc;
+}
+
+.speech-history-item p {
+  color: #94a3b8;
+}
+
+.speech-history-item strong {
+  color: #93c5fd;
+}
+
+/* =========================
+   Loading and Empty States
+========================= */
+
+.speaking-loading,
+.speaking-empty-state {
+  padding: 28px;
+  border: 1px dashed #334155;
+  border-radius: 12px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.speaking-error {
+  padding: 14px 16px;
+  border: 1px solid rgb(248 113 113 / 30%);
+  border-radius: 10px;
+  background: rgb(127 29 29 / 20%);
+  color: #fca5a5;
+}
+
+/* =========================
+   Responsive Design
+========================= */
+
+@media (max-width: 600px) {
+  .speaking-page {
+    width: calc(100% - 24px);
+    margin: 20px auto;
+  }
+
+  .speaking-recorder,
+  .transcript-panel,
+  .speech-score-card,
+  .audience-panel {
+    padding: 18px;
+  }
+
+  .speaking-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .speaking-dashboard {
+    width: calc(100% - 24px);
+    margin: 20px auto;
+  }
+
+  .speaking-action-card {
+    padding: 20px;
+  }
+
+  .score-label {
+    font-size: 0.9rem;
+  }
+
+  .speech-timer {
+    width: 100%;
+  }
+}
