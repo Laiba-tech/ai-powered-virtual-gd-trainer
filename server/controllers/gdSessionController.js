@@ -36,7 +36,24 @@ const completeGDSession = async (req, res) => {
   try {
     const { sessionId } = req.params;
 
-    const session = await GDSession.findById(sessionId);
+    let session = await GDSession.findOneAndUpdate(
+      {
+        _id: sessionId,
+        userId: req.userId,
+        status: { $ne: "completed" },
+      },
+      {
+        $set: {
+          status: "completed",
+          endedAt: new Date(),
+        },
+      },
+      { new: true }
+    );
+
+    if (!session) {
+      session = await GDSession.findById(sessionId);
+    }
 
     if (!session) {
       return res.status(404).json({
@@ -50,10 +67,11 @@ const completeGDSession = async (req, res) => {
       });
     }
 
-    session.status = "completed";
-    session.endedAt = new Date();
-
-    await session.save();
+    if (session.status !== "completed") {
+      return res.status(409).json({
+        message: "GD session could not be completed. Please try again.",
+      });
+    }
 
     res.status(200).json({
       message: "GD session completed successfully.",

@@ -8,6 +8,11 @@ const gdMessageSchema = new mongoose.Schema(
       required: true,
     },
 
+    replyToMessageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "GDMessage",
+    },
+
     speaker: {
       type: String,
       enum: ["user", "ai"],
@@ -33,6 +38,17 @@ const gdMessageSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+  }
+);
+
+gdMessageSchema.index(
+  { sessionId: 1, replyToMessageId: 1, participant: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      speaker: "ai",
+      replyToMessageId: { $type: "objectId" },
+    },
   }
 );
 
