@@ -9,21 +9,19 @@ const {
   getHistory,
   getSession,
   getAudienceReaction,
+  getHint,
 } = require("../controllers/speakingController");
 
 const router = express.Router();
 
-// Protect speaking routes with existing authentication middleware
 router.use(protect);
 
-// Test endpoint
 router.get("/test", (req, res) => {
   res.json({
     message: "Speaking routes are working!",
   });
 });
 
-// Existing speaking routes — preserved
 router.get("/topics", getTopics);
 router.post("/sessions", createSession);
 router.get("/sessions", getHistory);

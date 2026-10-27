@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+const jwtSecret = process.env.JWT_SECRET || "dev-secret-key";
 
-// REGISTER
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (existingUser) {
       return res.status(409).json({
@@ -26,11 +26,11 @@ const registerUser = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Account created successfully.",
       user: {
         id: user._id,
@@ -41,26 +41,23 @@ const registerUser = async (req, res) => {
   } catch (error) {
     console.error("Registration error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error during registration.",
     });
   }
 };
 
-// LOGIN
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Check input
     if (!email || !password) {
       return res.status(400).json({
         message: "Please provide email and password.",
       });
     }
 
-    // 2. Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
       return res.status(401).json({
@@ -68,11 +65,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 3. Compare password with hashed password
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(401).json({
@@ -80,19 +73,13 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 4. Create JWT
     const token = jwt.sign(
-      {
-        userId: user._id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { userId: user._id },
+      jwtSecret,
+      { expiresIn: "7d" }
     );
 
-    // 5. Send response
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successful.",
       token,
       user: {
@@ -104,13 +91,12 @@ const loginUser = async (req, res) => {
   } catch (error) {
     console.error("Login error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error during login.",
     });
   }
 };
 
-// GET CURRENT USER
 const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
@@ -121,7 +107,7 @@ const getCurrentUser = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       user: {
         id: user._id,
         name: user.name,
@@ -131,7 +117,7 @@ const getCurrentUser = async (req, res) => {
   } catch (error) {
     console.error("Get current user error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error.",
     });
   }

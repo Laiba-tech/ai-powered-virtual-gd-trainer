@@ -8,7 +8,7 @@ function GDSetup() {
   const [difficulty, setDifficulty] = useState("Intermediate");
   const [duration, setDuration] = useState("10");
   const [loading, setLoading] = useState(false);
-const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
   const topics = [
     "AI in Education",
@@ -19,24 +19,23 @@ const [error, setError] = useState("");
   ];
 
   const handleStart = async () => {
-  if (!topic) {
-    return;
-  }
-
-  try {
-    setLoading(true);
-    setError("");
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
+    if (!topic) {
+      setError("Please choose a topic.");
       return;
     }
 
-    const response = await fetch(
-      "http://localhost:5000/api/gd-sessions",
-      {
+    try {
+      setLoading(true);
+      setError("");
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/api/gd-sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,34 +46,30 @@ const [error, setError] = useState("");
           difficulty,
           duration: Number(duration),
         }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Unable to create GD session.");
+        return;
       }
-    );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      setError(data.message || "Unable to create GD session.");
-      return;
+      navigate("/gd-room", {
+        state: {
+          session: data.session,
+        },
+      });
+    } catch (error) {
+      console.error("GD session error:", error);
+      setError("Unable to connect to server. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    console.log("GD Session Created:", data.session);
-
-    navigate("/gd-room", {
-      state: {
-        session: data.session,
-      },
-    });
-  } catch (error) {
-    console.error("GD session error:", error);
-    setError("Unable to connect to server. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      {/* Navbar */}
       <nav className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <button
@@ -93,7 +88,6 @@ const [error, setError] = useState("");
         </div>
       </nav>
 
-      {/* Main */}
       <main className="mx-auto max-w-3xl px-6 py-16">
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -111,7 +105,6 @@ const [error, setError] = useState("");
         </div>
 
         <div className="space-y-8 rounded-2xl border border-white/10 bg-slate-900 p-8">
-          {/* Topic */}
           <div>
             <label className="mb-3 block text-sm font-medium text-slate-300">
               Discussion Topic
@@ -134,7 +127,6 @@ const [error, setError] = useState("");
             </div>
           </div>
 
-          {/* Difficulty */}
           <div>
             <label className="mb-3 block text-sm font-medium text-slate-300">
               Difficulty
@@ -157,7 +149,6 @@ const [error, setError] = useState("");
             </div>
           </div>
 
-          {/* Duration */}
           <div>
             <label className="mb-3 block text-sm font-medium text-slate-300">
               Duration
@@ -180,7 +171,6 @@ const [error, setError] = useState("");
             </div>
           </div>
 
-          {/* Summary */}
           <div className="rounded-xl border border-white/10 bg-slate-950 p-5">
             <p className="text-sm text-slate-500">Session Summary</p>
 
@@ -207,20 +197,20 @@ const [error, setError] = useState("");
               </div>
             </div>
           </div>
-{error && (
-  <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-    {error}
-  </div>
-)}
 
-          {/* Start */}
+          {error && (
+            <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
           <button
-  onClick={handleStart}
-  disabled={!topic || loading}
-  className="w-full rounded-xl bg-white px-6 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
->
-  {loading ? "Creating Session..." : "Enter Virtual GD →"}
-</button>
+            onClick={handleStart}
+            disabled={!topic || loading}
+            className="w-full rounded-xl bg-white px-6 py-3.5 font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {loading ? "Creating Session..." : "Enter Virtual GD ?"}
+          </button>
         </div>
       </main>
     </div>

@@ -59,6 +59,13 @@ function Home() {
               </a>
 
               <a
+                href="/login"
+                className="rounded-xl border border-indigo-400/40 bg-indigo-500/10 px-7 py-3.5 font-semibold text-indigo-200 transition hover:border-indigo-300 hover:text-white"
+              >
+                Public Speaking
+              </a>
+
+              <a
                 href="#features"
                 className="rounded-xl border border-white/15 px-7 py-3.5 font-semibold text-slate-300 transition hover:border-white/30 hover:text-white"
               >

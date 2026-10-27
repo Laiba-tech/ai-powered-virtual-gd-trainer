@@ -84,7 +84,6 @@ function GDReport() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto max-w-5xl px-6 py-12">
-
         <h1 className="text-3xl font-bold">
           GD Performance Report
         </h1>
@@ -93,7 +92,6 @@ function GDReport() {
           Your session conversation and performance analysis.
         </p>
 
-        {/* Session Information */}
         <div className="mt-8 rounded-2xl border border-white/10 bg-slate-900 p-6">
           <p className="text-sm text-slate-500">
             Discussion Topic
@@ -105,22 +103,15 @@ function GDReport() {
 
           <div className="mt-4 flex gap-8 text-sm text-slate-400">
             <p>
-              Difficulty:{" "}
-              <span className="text-white">
-                {session.difficulty}
-              </span>
+              Difficulty: <span className="text-white">{session.difficulty}</span>
             </p>
 
             <p>
-              Duration:{" "}
-              <span className="text-white">
-                {session.duration} minutes
-              </span>
+              Duration: <span className="text-white">{session.duration} minutes</span>
             </p>
           </div>
         </div>
 
-        {/* Conversation */}
         <div className="mt-8">
           <h2 className="text-xl font-semibold">
             Discussion Transcript
@@ -154,7 +145,7 @@ function GDReport() {
                   <p className="font-semibold">
                     {message.speaker === "user"
                       ? "You"
-                      : `AI — ${message.participant}`}
+                      : `AI ? ${message.participant}`}
                   </p>
 
                   <span className="text-xs text-slate-500">
@@ -176,7 +167,6 @@ function GDReport() {
         >
           Back to Dashboard
         </button>
-
       </div>
     </div>
   );

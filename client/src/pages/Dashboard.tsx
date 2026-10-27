@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -39,14 +38,11 @@ function Dashboard() {
       }
 
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/gd-sessions/dashboard-stats",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch("http://localhost:5000/api/gd-sessions/dashboard-stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 401 || response.status === 403) {
           navigate("/login");
@@ -132,7 +128,7 @@ function Dashboard() {
                 ? "..."
                 : stats.averageScore !== null
                   ? stats.averageScore
-                  : "—"}
+                  : "?"}
             </p>
           </div>
 
@@ -144,22 +140,42 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-10 rounded-2xl border border-white/10 bg-slate-900 p-8">
-          <h2 className="text-2xl font-semibold">
-            Start your next practice session
-          </h2>
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-slate-900 p-8">
+            <h2 className="text-2xl font-semibold">
+              Start your next GD session
+            </h2>
 
-          <p className="mt-3 text-slate-400">
-            Choose a topic and enter a virtual Group Discussion with AI
-            participants.
-          </p>
+            <p className="mt-3 text-slate-400">
+              Choose a topic and enter a virtual Group Discussion with AI
+              participants.
+            </p>
 
-          <button
-            onClick={() => navigate("/gd-setup")}
-            className="mt-6 rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200"
-          >
-            Start GD →
-          </button>
+            <button
+              onClick={() => navigate("/gd-setup")}
+              className="mt-6 rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-slate-200"
+            >
+              Start GD
+            </button>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-slate-900 p-8">
+            <h2 className="text-2xl font-semibold">
+              Practice public speaking
+            </h2>
+
+            <p className="mt-3 text-slate-400">
+              Pick a topic, deliver a speech, and get AI feedback on delivery,
+              structure, and confidence.
+            </p>
+
+            <button
+              onClick={() => navigate("/speaking")}
+              className="mt-6 rounded-xl bg-indigo-500 px-6 py-3 font-semibold text-white transition hover:bg-indigo-400"
+            >
+              Open Public Speaking
+            </button>
+          </div>
         </div>
       </main>
     </div>

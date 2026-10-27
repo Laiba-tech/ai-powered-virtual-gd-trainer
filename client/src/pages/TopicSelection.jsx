@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const predefinedTopics = [
   "Artificial Intelligence",
@@ -10,6 +11,7 @@ const predefinedTopics = [
 ];
 
 export default function TopicSelection() {
+  const navigate = useNavigate();
   const [selectedTopic, setSelectedTopic] = useState("");
   const [customTopic, setCustomTopic] = useState("");
   const [useCustomTopic, setUseCustomTopic] = useState(false);
@@ -40,17 +42,17 @@ export default function TopicSelection() {
       return;
     }
 
-    // Save the selected topic for the next screen.
     sessionStorage.setItem("speakingTopic", topic);
     sessionStorage.setItem("speakingDifficulty", difficulty);
     sessionStorage.setItem("speakingDuration", String(duration));
 
-    // Replace this with your existing navigation to SpeechPractice.
-    window.location.href = "/speaking/practice";
+    navigate("/speaking/practice", {
+      state: { topic, difficulty, duration },
+    });
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="speaking-page speaking-form" onSubmit={handleSubmit}>
       <h2>Choose Your Speaking Topic</h2>
 
       <label htmlFor="predefined-topic">Select a topic</label>

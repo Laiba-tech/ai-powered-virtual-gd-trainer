@@ -1,32 +1,33 @@
 
 const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+
+let memoryServer;
 
 const connectDB = async () => {
   try {
-    const mongoURL = process.env.MONGO_URL;
+    const mongoURL =
+      process.env.MONGO_URL ||
+      process.env.MONGO_URI ||
+      process.env.MONGODB_URI;
 
-    if (!mongoURL) {
-      throw new Error("MONGO_URL is missing from the .env file");
+    if (mongoURL) {
+      await mongoose.connect(mongoURL);
+      console.log("MongoDB connected successfully ✅");
+      return;
     }
 
-    await mongoose.connect(mongoURL);
+    if (!memoryServer) {
+      memoryServer = await MongoMemoryServer.create();
+    }
 
-    console.log("MongoDB connected successfully ✅");
+    const memoryUri = memoryServer.getUri();
+    await mongoose.connect(memoryUri);
+
+    console.log("MongoDB connected successfully ✅ using in-memory MongoDB");
   } catch (error) {
     console.error("MongoDB connection failed ❌", error.message);
     throw error;
-  }
-};
-
-module.exports = connectDB;
-    await mongoose.connect(process.env.MONGO_URI);
-
-    console.log("MongoDB connected successfully ✅");
-  } catch (error) {
-    console.error("MongoDB connection failed ❌");
-    console.error(error.message);
-
-    process.exit(1);
   }
 };
 

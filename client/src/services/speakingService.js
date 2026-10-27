@@ -1,4 +1,3 @@
-
 const API_URL = "http://localhost:5000/api/speaking";
 
 function getToken() {
@@ -59,10 +58,11 @@ export const speakingService = {
       body: JSON.stringify(payload),
     });
   },
+
   getHint(topic, transcript) {
-  return request("/hint", {
-    method: "POST",
-    body: JSON.stringify({ topic, transcript })
-  });
-},
+    return request("/hint", {
+      method: "POST",
+      body: JSON.stringify({ topic, transcript }),
+    });
+  },
 };

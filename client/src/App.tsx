@@ -43,12 +43,54 @@ function App() {
           }
         />
 
-        <Route path="/speaking" element={<SpeakingHome />} />
-        <Route path="/speaking/topics" element={<TopicSelection />} />
-        <Route path="/speaking/practice" element={<SpeechPractice />} />
-        <Route path="/speaking/report" element={<SpeechReport />} />
-        <Route path="/speaking/history" element={<SpeechHistory />} />
-        <Route path="/speaking/audience" element={<VirtualAudience />} />
+        <Route
+          path="/speaking"
+          element={
+            <ProtectedRoute>
+              <SpeakingHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/speaking/topics"
+          element={
+            <ProtectedRoute>
+              <TopicSelection />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/speaking/practice"
+          element={
+            <ProtectedRoute>
+              <SpeechPractice />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/speaking/report"
+          element={
+            <ProtectedRoute>
+              <SpeechReport />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/speaking/history"
+          element={
+            <ProtectedRoute>
+              <SpeechHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/speaking/audience"
+          element={
+            <ProtectedRoute>
+              <VirtualAudience />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/gd-room"

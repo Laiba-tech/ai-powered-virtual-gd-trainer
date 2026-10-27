@@ -14,9 +14,24 @@ export default function SpeechPractice() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const topic = state?.topic || "Artificial Intelligence";
-  const difficulty = state?.difficulty || "Beginner";
-  const duration = state?.duration || 2;
+  const savedTopic = sessionStorage.getItem("speakingTopic");
+  const savedDifficulty = sessionStorage.getItem("speakingDifficulty");
+  const selectedDuration =
+    state?.duration ?? sessionStorage.getItem("speakingDuration");
+  const parsedDuration = Number(selectedDuration);
+
+  const topic =
+    typeof state?.topic === "string" && state.topic.trim()
+      ? state.topic.trim()
+      : savedTopic?.trim() || "Artificial Intelligence";
+  const difficulty =
+    typeof state?.difficulty === "string" && state.difficulty.trim()
+      ? state.difficulty.trim()
+      : savedDifficulty?.trim() || "Beginner";
+  const duration =
+    Number.isFinite(parsedDuration) && parsedDuration > 0
+      ? parsedDuration
+      : 2;
 
   useEffect(() => {
     if (!listening) return;
